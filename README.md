@@ -5,6 +5,7 @@
 
 <div style="display:flex; flex-direction:column; gap:10px;">  
 	<img src="Images/Obsidian_daily_template_example.png" width="600">  
+	<img src="Images/Obsidian_daily_template_example3.png" width="600">  
 	<img src="Images/Obsidian_daily_template_example2.png" width="600">  
 </div>
 
