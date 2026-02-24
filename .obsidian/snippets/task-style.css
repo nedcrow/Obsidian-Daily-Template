@@ -1,0 +1,28 @@
+/* [x] 완료 - 취소선 제거 (편집 모드) */
+.HyperMD-task-line[data-task="x"],
+.HyperMD-task-line[data-task="x"] span,
+.HyperMD-task-line[data-task="x"] .cm-strikethrough {
+  text-decoration: none !important;
+}
+
+/* [x] 완료 - 취소선 제거 (미리보기 모드) */
+.markdown-preview-view .task-list-item[data-task="x"],
+.markdown-preview-view .task-list-item[data-task="x"] span,
+.markdown-preview-view .task-list-item[data-task="x"] p {
+  text-decoration: none !important;
+}
+
+/* [-] 제외 - 취소선 적용 (편집 모드) */
+.HyperMD-task-line[data-task="-"],
+.HyperMD-task-line[data-task="-"] span {
+  text-decoration: line-through !important;
+  opacity: 0.6;
+}
+
+/* [-] 제외 - 취소선 적용 (미리보기 모드) */
+.markdown-preview-view .task-list-item[data-task="-"],
+.markdown-preview-view .task-list-item[data-task="-"] span,
+.markdown-preview-view .task-list-item[data-task="-"] p {
+  text-decoration: line-through !important;
+  opacity: 0.6;
+}
