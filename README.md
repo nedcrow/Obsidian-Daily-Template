@@ -3,6 +3,9 @@
 데일리 노트 기반의 할 일 관리 Obsidian 볼트 템플릿입니다.
 미완료 항목 자동 이월, 잔디 캘린더, 3단계 체크박스 시스템을 제공합니다.
 
+![[Obsidian daily template example.png]]
+![[Obsidian daily template example2.png]]
+
 ---
 
 ## ✨ 주요 기능
