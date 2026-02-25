@@ -1,14 +1,8 @@
 ---
 state:
-  showOnlyLogged: false
+  showOnlyLogged: true
 ---
-<%*
-const pathParts = tp.file.folder(true).split("/");
-const yearFolder = pathParts.pop();
-const year = parseInt(yearFolder.match(/\d+/)[0]);
-await tp.file.rename("_잔디(Year)");
--%>
-# 🌱 <% year %>년 잔디
+# 🌱 2026년 잔디
 
 ```dataviewjs
 const page = dv.current();

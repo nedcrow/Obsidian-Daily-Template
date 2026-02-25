@@ -41,8 +41,6 @@ if (files.length > 0) {
 ---
 date: <% inputDate.format("YYYY-MM-DD") %>
 type: daily-log
-tags:
-  - logs
 ---
 
 > [!debug] 이전 로그: <% debugMsg %>
@@ -53,4 +51,4 @@ tags:
 ## ✅ To-Do
 > 형식: `- [-] 할 일 내용 [관련링크](URL) #직무태그` / 완료 `[x]` / 포기는 그대로 `[-]`
 
-<% pendingTodos || "- [-] " %>
+<% pendingTodos || "- [ ] " %>

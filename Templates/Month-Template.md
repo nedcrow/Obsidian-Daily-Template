@@ -1,3 +1,7 @@
+---
+state:
+  showOnlyLogged: false
+---
 <%*
 const pathParts = tp.file.folder(true).split("/");
 const monthFolder = pathParts.pop();
@@ -9,7 +13,10 @@ await tp.file.rename("_잔디(Month)");
 # 🌱 <% year %>년 <% month %>월 잔디
 
 ```dataviewjs
-const pathParts = dv.current().file.folder.split("/");
+const page = dv.current();
+const file = app.workspace.getActiveFile(); // ✅ 추가
+
+const pathParts = page.file.folder.split("/");
 const monthFolder = pathParts.pop();
 const yearFolder = pathParts.pop();
 const year = parseInt(yearFolder.match(/\d+/)[0]);
@@ -17,38 +24,55 @@ const month = parseInt(monthFolder.match(/\d+/)[0]);
 const today = moment().startOf("day");
 const monthMoment = moment(`${year}-${String(month).padStart(2, "0")}-01`);
 
+// ✅ namespace 기준으로 읽기
+let showOnlyLogged = page.state?.showOnlyLogged ?? false;
+
 // 토글 버튼
-let showOnlyLogged = false;
 const toggleBtn = this.container.createEl("button", {
-  text: "📋 기록된 날만 보기: OFF",
-  attr: { style: "margin-bottom:12px; padding:4px 12px; cursor:pointer; border-radius:6px; border:1px solid #888; background:#333; color:#fff;" }
+  text: `📋 기록된 날만 보기: ${showOnlyLogged ? "ON" : "OFF"}`,
+  attr: { 
+    style: "margin-bottom:12px; padding:4px 12px; cursor:pointer; border-radius:6px; border:1px solid #888; background:#333; color:#fff;" 
+  }
 });
-toggleBtn.addEventListener("click", () => {
+
+// 초기 색상 반영
+toggleBtn.style.background = showOnlyLogged ? "#4caf50" : "#333";
+
+toggleBtn.addEventListener("click", async () => {
   showOnlyLogged = !showOnlyLogged;
+
   toggleBtn.setText(`📋 기록된 날만 보기: ${showOnlyLogged ? "ON" : "OFF"}`);
   toggleBtn.style.background = showOnlyLogged ? "#4caf50" : "#333";
+
+  // ✅ frontmatter 저장
+  await app.fileManager.processFrontMatter(file, fm => {  
+    if (!fm.state) fm.state = {};  
+    fm.state.showOnlyLogged = showOnlyLogged;  
+  });
+
   renderGrass();
 });
 
 // 파일 읽기
 const files = dv.pages()
-  .where(p => p.type === "daily-log" && p.date &&
-    moment(p.date.toString()).year() === year &&
-    moment(p.date.toString()).month() + 1 === month)
+  .where(p => p.type === "daily-log" && p.date && moment(p.date.toString()).year() === year)
   .array();
 
 const completedDates = new Set();
 const loggedDates = new Set();
 
-for (const page of files) {
-  const file = app.vault.getAbstractFileByPath(page.file.path);
-  if (!file) continue;
-  const content = await app.vault.read(file);
-  const dateStr = moment(page.date.toString()).format("YYYY-MM-DD");
+for (const p of files) {
+  const f = app.vault.getAbstractFileByPath(p.file.path);
+  if (!f) continue;
+
+  const content = await app.vault.read(f);
+  const dateStr = moment(p.date.toString()).format("YYYY-MM-DD");
   loggedDates.add(dateStr);
+
   const hasIncomplete = content.split("\n")
     .filter(line => !line.trimStart().startsWith(">"))
-    .some(line => line.match(/^- \[[ -]\]/));
+    .some(line => line.match(/^- \[ \]/));
+
   if (!hasIncomplete) completedDates.add(dateStr);
 }
 
